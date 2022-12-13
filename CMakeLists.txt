@@ -18,6 +18,7 @@ find_package(pluginlib REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(Boost REQUIRED COMPONENTS filesystem)
 
 include_directories(include)
 
@@ -39,8 +40,9 @@ ament_target_dependencies(my_publisher
   "rclcpp")
 
 # add the subscriber example
-add_executable(my_subscriber src/my_subscriber.cpp)
-ament_target_dependencies(my_subscriber
+add_executable(record_image src/my_subscriber.cpp)
+target_link_libraries(record_image ${Boost_LIBRARIES})
+ament_target_dependencies(record_image
   "cv_bridge"
   "image_transport"
   "OpenCV"
@@ -69,7 +71,7 @@ rosidl_target_interfaces(resized_plugins
 
 # Install executables
 install(
-  TARGETS my_publisher my_subscriber resized_plugins publisher_from_video
+  TARGETS my_publisher record_image resized_plugins publisher_from_video
   RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
